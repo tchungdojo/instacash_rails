@@ -44,7 +44,7 @@
 <script>
 	$(document).ready(function(){
 		// var socket = io.connect("https://instacash-node.herokuapp.com/", {force_connection: true});
-		var socket = io.connect("https://instacash-node.herokuapp.com:8000", {force_connection: true});
+		var socket = io.connect("https://instacash-node.herokuapp.com", {force_connection: true});
 		var username = prompt('Please enter a username');
 		while(username == null || username == ''){
 			var username = prompt('Please enter a username');
