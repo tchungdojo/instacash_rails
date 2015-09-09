@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>InstaCash</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://pacific-fortress-2366.herokuapp.com/socket.io/socket.io.js"></script>
+</head>
+<style>
+  body { 
+    height: 100%;
+    width: 100%;
+  }
+  #container{
+    margin: 2.5% 5%;
+    width: 90%;
+  }
+	#lender{
+		display: inline-block;
+	}
+	#borrower{
+		display: inline-block;
+	}
+  #home_page_title{
+    color: #BCD3E2;
+    display: inline-block;
+    margin-left: 5%;
+  }
+  .logout{
+    display: inline-block;
+    margin-left: 2.5%;
+  }
+  a{
+    color: grey;
+  }
+  td, th{
+    text-align: center;
+  }
+  li{
+    color: red;
+    list-style: none;
+    margin: 0;
+  }
+  #chat_btn{
+    color: white;
+
+  }
+</style>
+<body>
+<div id='container'>
+  <h1 id='home_page_title'>InstaCash</h1>
+  
+  <% if current_lender %>
+    <form class='logout' action='/sessions/<%= current_lender.id %>' method='post'>
+      <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+      <input type='hidden' name='_method' value='delete'>
+      <input class="btn btn-primary" type='submit' value='Log Out'>
+    </form>
+    <button class='btn btn-primary'><a href='/sessions/chatroom' id='chat_btn'>Chat Room</a></button>
+  <% end %>
+  <% if current_borrower %>
+    <form class='logout' action='/sessions/<%= current_borrower.id %>' method='post'>
+      <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+      <input type='hidden' name='_method' value='delete'>
+      <input class="btn btn-primary" type='submit' value='Log Out'>
+    </form>
+    <button class='btn btn-primary'><a href='/sessions/chatroom' id='chat_btn'>Chat Room</a></button>
+  <% end %>
+
+
+<% if flash[:error] %>
+  <ul>
+    <li><%= flash[:error] %></li>
+  </ul>
+<% end %>
+<% if flash[:errors] %>
+  <% flash[:errors].each do |error| %>
+    <ul>
+      <li><%= error %></li>
+    </ul>
+  <% end %>
+<% end %>
+
+<%= yield %>
+
+</div>
+</body>
+</html>

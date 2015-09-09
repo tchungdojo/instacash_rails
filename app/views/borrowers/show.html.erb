@@ -1,0 +1,19 @@
+<h2>Borrower: <%= current_borrower.first_name %> <%= current_borrower.last_name %></h2>
+<p>Amount Need: $<%= current_borrower.money %></p>
+<p>Amount Raised: $<%= current_borrower.raised %></p>
+
+<h3>List of people who lend you money:</h3>
+<table class='table table-striped'>
+	<thead>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Amount Lent</th>
+	</thead>
+	<% @lenders.each do |l| %>
+		<tr>
+			<td><%= l.lender.first_name %> <%= l.lender.last_name %></td>
+			<td><%= l.lender.email %></td>
+			<td>$<%= l.amount %></td>
+		</tr>
+	<% end %>
+</table>

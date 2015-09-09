@@ -1,0 +1,88 @@
+<style>
+	#chatbox{
+		border: 4px solid #BCD3E2;
+		border-radius: 4px;
+		width: 70%;
+		height: 500px;
+		display: inline-block;
+		padding: 2.5% 5%;
+		overflow-y: scroll;
+	}
+	#online{
+		border: 4px solid #BCD3E2;
+		border-radius: 4px;
+		width: 20%;
+		height: 500px;
+		display: inline-block;
+		vertical-align: top;
+		padding: 2.5% 5%;
+		overflow-y: scroll;
+	}
+	#user{
+		font-weight: bold;
+	}
+	p{
+		margin: 0px;
+	}
+	#post{
+		height: 35px;
+		width:83.4%;
+		border: 4px solid #BCD3E2;
+		border-radius: 4px;
+	}
+	#send_chat{
+		margin-top: 5px;
+	}
+	#live_h2:hover{
+		color: #BCD3E2;
+		font-style: italic;
+		font-weight: none;
+		margin-left: 650px;
+	}
+</style>
+
+<script>
+	$(document).ready(function(){
+		var socket = io.connect("https://pacific-fortress-2366.herokuapp.com/", {force_connection: true});
+		var username = prompt('Please enter a username');
+		while(username == null || username == ''){
+			var username = prompt('Please enter a username');
+		}
+		//when user sends a message.
+		$('#send_chat').submit(function(){
+			socket.emit('new_message', {username: username, message: $('#post').val()});
+			// to reset input filed #post back to "" after new_message emit.
+			$('#send_chat')[0].reset();
+			// to prevent the page from refreshing.
+			return false;
+		})
+		socket.on('res_message', function(data){
+			$("#chatbox").append("<p><span id='user'>"+ data.username +":</span> "+ data.message +"</p>")
+		})
+		//when a new user enters chatroom.
+		socket.emit('new_username', {username: username});
+		socket.on('online', function(data){
+			$("#online").html("");
+			for(var each in data){
+				$("#online").append("<p>"+ data[each] +"</p>")
+			}
+			$("#chatbox").append("<p>Welcome to InstaChat "+ data[each] +"!</p>")
+		})
+		//when a user disconnect from chatroom.
+		socket.on('user_disconnect', function(data){
+			$("#online").html("");
+			for(var each in data){
+				$("#online").append("<p>"+ data[each] +"</p>")
+			}
+		})
+
+	})	 
+</script>
+
+<h2><span id='live_h2'>Chat-a-way live!</span></h2>
+<div id='chatbox'></div>
+<div id='online'></div>
+<form id='send_chat'>
+	<input type='text' id='post'>
+	<input class='btn btn-primary' type="submit" value='send'>
+</form>
