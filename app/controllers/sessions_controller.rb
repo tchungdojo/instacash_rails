@@ -32,7 +32,8 @@ class SessionsController < ApplicationController
 		redirect_to '/sessions/page'
 	end
 	def chatroom
-
+		session[:borrower_id] = nil
+		session[:lender_id] = nil
 	end
 
 
